@@ -11,37 +11,28 @@ const App = () => {
   const state = initialData;
 
   const [pieces, setPieces] = useState(state.pieces);
-  const [workflows, setWorkflows] = useState(state.workflows);
-  const [pixelfaktor, setPixelFaktor] = useState(0.4);
-  const [starttime, setStartTime] = useState(new Date(0).setHours(11));
 
-  const getTimeString = (duration) => {
-    const finaltimeInMilliseconds = starttime + (duration * 1000);
-    const hours = Math.floor(finaltimeInMilliseconds / (60 * 60 * 1000));
-    const minutes = Math.floor((finaltimeInMilliseconds % (60 * 60 * 1000)) / (60 * 1000));
-    const seconds = Math.floor((finaltimeInMilliseconds % (60 * 1000)) / 1000);
-    
-    const finalTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    return finalTimeString
-  }
+  //ein workflow speicher für jeden workflow
+  const [workflows, setWorkflows] = useState(state.workflows);
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableID } = result;
-    if (!destination && source.droppableId === "sidebar_droppable" || source.droppableId === "sidebar_droppable" && destination.droppableId === "sidebar_droppable")
+    console.log("DRAG")
+    if (!destination && source.droppableId === "sidebar_droppable")
       return;
-    if (!destination || destination.droppableId === "sidebar_droppable") {
+    if (!destination){
       const source_workflow = workflows[source.droppableId];
       const source_newPieces = Array.from(source_workflow.pieceIDs);
       source_newPieces.splice(source.index, 1);
       const newWorkflow = { ...source_workflow, pieceIDs: source_newPieces };
-
-      //prevent animation
+    
       setWorkflows({ ...workflows, [source.droppableId]: newWorkflow });
       return;
     }
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
-
+    if (destination.droppableId === "sidebar_droppable")
+      return;
 
     //hänge draggable an die richtige Stelle in destination
     const dest_workflow = workflows[destination.droppableId];
@@ -63,12 +54,10 @@ const App = () => {
       const newSourceWorkflow = { ...source_workflow, pieceIDs: source_newPieces };
       updatedWorkflows = { ...updatedWorkflows, [source.droppableId]: newSourceWorkflow };
     }
-
+    
     setWorkflows(updatedWorkflows);
   };
 
-  //WORKFLOW MANAGEMENT
-  
   const addBtnClick = () => {
     const workflowId = `workflow-${Date.now()}`;
     const pieceIds = [];
@@ -84,38 +73,12 @@ const App = () => {
   }
 
   const deleteBtnClick = (workflowId) => {
-    console.log("delete " + workflowId)
     const updatedWorkflows = { ...workflows };
     delete updatedWorkflows[workflowId];
     setWorkflows(updatedWorkflows);
   };
-
-  const duplicateBtnClick = (workflowId) => {
-    const newworkflowId = `workflow-${Date.now()}`;
-    const workflow = { ...workflows[workflowId], id: newworkflowId };
-    const updatedWorkflows = { ...workflows, [newworkflowId]: workflow };
-    setWorkflows(updatedWorkflows);
-  };
-
-  const workflowRename = (workflowId, newName) => {
-    if (workflowId === newName)
-      return true;
-    if (workflows[newName] || !newName)
-      return false;
-    const workflow = workflows[workflowId];
-    const newWorkflow = { ...workflow, id: newName }
-    const updatedWorkflows = { ...workflows };
-    delete updatedWorkflows[workflowId];
-    const newWorkflows = { ...updatedWorkflows, [newName]: newWorkflow };
-    setWorkflows(newWorkflows);
-    return true;
-  }
-
-  //FUNKTIONALITÄT
 
   const saveBtnClick = () => {
-    
-    //KONSOLIDIEREN VON ZUSAMMENHÄNGENDEN PAUSENZEITEN -> piece.visible = false
     const newData = {
       pieces: state.pieces,
       workflows: workflows,
@@ -141,34 +104,10 @@ const App = () => {
     };
   }
 
-  //PIECES KONFIGURATION
-
-  const updatePieces = (id, settings) => {
-    const updatedPieces = { ...pieces, [id]: settings };
-    setPieces(updatedPieces);
-  }
-
-  const addPiece = () => {
-    const newPieceId = `p-${Date.now()}`;
-    const newPiece = {
-      id: newPieceId,
-      name: newPieceId,
-      image: "1.svg",
-      time: "300",
-      color: '#ffffff',
-      pause: false,
-      visible: true,
-      additionalText: '',
-      additionalDuration: ''  // add a timestamp
-    };
-    const currentPieces = { ...pieces };
-    const updatedPieces = { ...currentPieces, [newPieceId]: newPiece };
-    setPieces(updatedPieces);
-  }
-
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Sidebar pieces={pieces} buttonclicked={addBtnClick} savebuttonclicked={saveBtnClick} upload={upload} updatepieces={updatePieces} addpiece={addPiece} setpixelfaktor={setPixelFaktor} gettimestring={getTimeString} setstarttime={setStartTime}/>
+      <Sidebar pieces={pieces} buttonclicked={addBtnClick} savebuttonclicked={saveBtnClick} upload={upload}/>
+
       {Object.keys(workflows).map(columnId => {
         const workflow = workflows[columnId];
         if (!workflow) {
@@ -178,7 +117,7 @@ const App = () => {
         }
         const workflow_pieces = workflow.pieceIDs.map(pieceID => pieces[pieceID]);
         return (
-          <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} />
+          <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} />
         );
       })}
     </DragDropContext>
