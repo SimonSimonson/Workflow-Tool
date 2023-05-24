@@ -5,7 +5,7 @@ const initialData = {
             name: "Piece 1",
             image: "0.svg",
             time: "60",
-            color: '#ffffff',
+            color: '#f7ffb0',
             pause: false,
             visible: true,
             additionalText: '',
@@ -17,7 +17,7 @@ const initialData = {
             name: "Piece 2",
             image: "1.svg",
             time: "300",
-            color: '#ffffff',
+            color: '#ffc1d8',
             pause: false,
             visible: true,
             additionalText: '',
@@ -29,7 +29,7 @@ const initialData = {
             name: "Piece 3",
             image: "2.svg",
             time: "360",
-            color: '#ffffff',
+            color: '#90e4d7',
             pause: false,
             visible: true,
             additionalText: '',
@@ -41,7 +41,7 @@ const initialData = {
             name: "Piece 4",
             image: "3.svg",
             time: "1800",
-            color: '#ffffff',
+            color: '#c4ffa2',
             pause: false,
             visible: true,
             additionalText: '',
@@ -50,8 +50,11 @@ const initialData = {
         },
     },
     workflows: {
-        'workflow-1': { id: 'workflow-1', pieceIDs: ['p3', 'p1', 'p4', 'p2', 'p3'] }
+        'workflow-1': { id: 'workflow-1', pieceIDs: ['p3', 'p1', 'p4', 'p2', 'p3'] },
+        'workflow-2': { id: 'workflow-2', pieceIDs: ['p3', 'p3', 'p2'] },
+        'workflow-3': { id: 'workflow-3', pieceIDs: ['p1', 'p2', 'p4', 'p3', 'p3'] },
+        'workflow-4': { id: 'workflow-4', pieceIDs: ['p2', 'p1', 'p1', 'p3', 'p2', 'p3', 'p1', 'p4'] }
     },
-    workflowOrder: ['workflow-1'],
+    workflowOrder: ['workflow-1', 'workflow-2','workflow-3','workflow-4'],
 };
 export default initialData;

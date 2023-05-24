@@ -97,7 +97,7 @@ const App = () => {
     setWorkflows(updatedWorkflows);
   };
 
-  const workflowRename = (workflowId, newName) => {
+/*   const workflowRename = (workflowId, newName) => {
     if (workflowId === newName)
       return true;
     if (workflows[newName] || !newName)
@@ -109,7 +109,46 @@ const App = () => {
     const newWorkflows = { ...updatedWorkflows, [newName]: newWorkflow };
     setWorkflows(newWorkflows);
     return true;
-  }
+  } */
+
+  const workflowRename = (workflowId, newName) => {
+    if (workflowId === newName) {
+      return true;
+    }
+    
+    if (workflows[newName] || !newName) {
+      return false;
+    }
+    
+    const workflow = workflows[workflowId];
+    const newWorkflow = { ...workflow, id: newName };
+  
+    const workflowIds = Object.keys(workflows);
+    const oldWorkflowIndex = workflowIds.findIndex(id => id === workflowId);
+  
+    const first_half = workflowIds.slice(0, oldWorkflowIndex);
+    const second_half = workflowIds.slice(oldWorkflowIndex + 1);
+  
+    const newWorkflows = {
+      [newName]: newWorkflow
+    };
+  
+    const updatedWorkflows = {
+      ...first_half.reduce((obj, id) => {
+        obj[id] = workflows[id];
+        return obj;
+      }, {}),
+      ...newWorkflows,
+      ...second_half.reduce((obj, id) => {
+        obj[id] = workflows[id];
+        return obj;
+      }, {})
+    };
+  
+    setWorkflows(updatedWorkflows);
+    return true;
+  };
+  
 
   //FUNKTIONALITÄT
 
@@ -159,7 +198,8 @@ const App = () => {
       pause: false,
       visible: true,
       additionalText: '',
-      additionalDuration: ''  // add a timestamp
+      additionalDuration: '',
+      messages: {},
     };
     const currentPieces = { ...pieces };
     const updatedPieces = { ...currentPieces, [newPieceId]: newPiece };

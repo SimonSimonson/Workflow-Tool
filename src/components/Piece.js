@@ -4,6 +4,13 @@ import Popup from './Popup';
 
 const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
   const pixelWidth = parseInt(piece.time) * pixelfaktor;
 
   const handleSettingsChange = (event) => {
@@ -22,22 +29,30 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
     }
   };
 
-  const addMessage = (index) => {
-    const updatedMessages = [...piece.messages];
-    updatedMessages[index] = { time: '', message: '', sound: '' };
-    updatePieces(piece.id, { ...piece, messages: updatedMessages })  
+  const addMessage = () => {
+    const index = piece.messages ? Object.keys(piece.messages).length : 0;
+    const updatedMessages = {
+      ...piece.messages,
+      [index]: { time: '', message: '', sound: '' }
+    };
+    updatePieces(piece.id, { ...piece, messages: updatedMessages });
   };
-
+  
   const delMessage = (index) => {
-    const updatedMessages = [...piece.messages];
+    const updatedMessages = {...piece.messages};
     delete updatedMessages[index];
     updatePieces(piece.id, { ...piece, messages: updatedMessages })  
   };
 
   const updateMessage = (index, field, value) => {
-    const updatedMessages = [...piece.messages];
-    updatedMessages[index][field] = value;
-    updatePieces(piece.id, { ...piece, messages: updatedMessages })
+    const updatedMessages = {
+      ...piece.messages,
+      [index]: {
+        ...piece.messages[index],
+        [field]: value
+      }
+    };
+    updatePieces(piece.id, { ...piece, messages: updatedMessages });
   };
 
   return (
@@ -52,6 +67,8 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
               ref={provided.innerRef}
               onClick={handlePopup}
               onBlur={handlePopup}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               id={newID}
             >
               <div className={isSidebar ? 'puzzle sidebar-puzzle' : 'puzzle'} style={{ backgroundColor: piece.color, width: isSidebar ? 'auto' : pixelWidth+"px"}}>
@@ -59,12 +76,14 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
                 {isSidebar && showPopup && (
                   <Popup onSettingsChange={handleSettingsChange} onColorChange={handleColorChange} onClose={handlePopup} piece={piece} updateMessage={updateMessage} delMessage={delMessage} addMessage={addMessage}></Popup>
                 )}
+                {!isSidebar && showTooltip && (
+                  <div className="toolbox">{piece.name}</div>
+                )}
               </div>
             </div>
           </>
         )}
       </Draggable>
-
     </>
   );
 };

@@ -142,3 +142,12 @@
     margin: 13px 8px;
 }
 
+.toolbox {
+    height: 8px; /* Initial height */
+    transition: height 0.3s; /* Add transition for smooth animation */
+    font-size: 12px;
+    margin-top: -8px;
+  }
+  
+  .toolbox:hover {
+  }
