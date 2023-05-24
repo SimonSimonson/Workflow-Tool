@@ -28,49 +28,50 @@ const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, p
 
 
     return (
-        <Draggable id={workflow.id} index={workflowindex}>
-            {(provided) => (
-                <div id={workflow.id} className="workflow-container"
-                    {...provided.draggableProps}
-                    ref={provided.innerRef}>
-                    <div className="workflow-header">
-                        <div
-                            className="workflow-title"
-                            contentEditable={true}
-                            onBlur={handleTitleChange}
-                            dangerouslySetInnerHTML={{ __html: workflow.id }}
-                        ></div>
-                        <button onClick={handleDeleteBtnClick}>-</button>
-                        <button onClick={handleDuplicateBtnClick}>*</button>
-                        <div className="summary">{sum / 60} Minuten</div>
-                        <div className="summary">{finalTimeString} Uhr</div>
-                        <div className="handle" {...provided.dragHandleProps}></div>
+        //<Draggable id={workflow.id} index={workflowindex}>
+        //    {(provided) => (
+        <div id={workflow.id} className="workflow-container"
+        //{...provided.draggableProps}
+        //ref={provided.innerRef}
+        >
+            <div className="workflow-header">
+                <div
+                    className="workflow-title"
+                    contentEditable={true}
+                    onBlur={handleTitleChange}
+                    dangerouslySetInnerHTML={{ __html: workflow.id }}
+                ></div>
+                <button onClick={handleDeleteBtnClick}>-</button>
+                <button onClick={handleDuplicateBtnClick}>*</button>
+                <div className="summary">{sum / 60} Minuten</div>
+                <div className="summary">{finalTimeString} Uhr</div>
+                <div className="handle" //{...provided.dragHandleProps}
+                ></div>
+            </div>
+            <Droppable droppableId={workflow.id} direction="horizontal" type="piece">
+                {(provided) => (
+                    <div
+                        className="puzzle-pieces"
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
+                        {pieces.map((piece, index) => (
+                            <Piece
+                                key={workflow.id + index}
+                                newID={piece.id + "_" + workflow.id + "_" + index}
+                                index={index}
+                                piece={piece}
+                                isSidebar={false}
+                                pixelfaktor={pixelfaktor}
+                            />
+                        ))}
+                        {provided.placeholder}
                     </div>
-                    <Droppable droppableId={workflow.id} direction="horizontal" type="piece">
-                        {(provided) => (
-                            <div
-                                className="puzzle-pieces"
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                            >
-                                {pieces.map((piece, index) => (
-                                    <Piece
-                                        key={workflow.id + index}
-                                        newID={piece.id + "_" + workflow.id + "_" + index}
-                                        index={index}
-                                        piece={piece}
-                                        isSidebar={false}
-                                        pixelfaktor={pixelfaktor}
-                                    />
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </div>
-            )}
-        </Draggable>
-    );
-};
+                )}
+            </Droppable>
+        </div>
+    )
+}
+        //</Draggable>
 
 export default Workflow;

@@ -169,12 +169,8 @@ const App = () => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Sidebar pieces={pieces} buttonclicked={addBtnClick} savebuttonclicked={saveBtnClick} upload={upload} updatepieces={updatePieces} addpiece={addPiece} setpixelfaktor={setPixelFaktor} gettimestring={getTimeString} setstarttime={setStartTime} />
-      <Droppable droppableID="main-droppable" type="workflow">
-        {(provided) => (
-          <div
-            className="main-container"
-            ref={provided.innerRef}
-            {...provided.droppableProps}>
+
+          <div className="main-container">
             {Object.keys(workflows).map((columnId, index) => {
               const workflow = workflows[columnId];
               if (!workflow) {
@@ -187,10 +183,8 @@ const App = () => {
                 <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} workflowindex={index}/>
               );
             })}
-            {provided.placeholder}
           </div>
-        )}
-      </Droppable>
+        
 
     </DragDropContext>
   );
