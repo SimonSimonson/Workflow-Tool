@@ -132,6 +132,12 @@
     text-align: center;
     padding: 8px;
 }
+.handle {
+    margin: 8px 8px 8px auto;
+    background-color: black;
+    height: 30px;
+    width: 30px;
+}
 .summary {
     margin: 13px 8px;
 }

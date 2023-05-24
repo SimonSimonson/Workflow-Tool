@@ -4,7 +4,7 @@ import initialData from './components/initialData';
 import Workflow from './components/Workflow';
 import Sidebar from "./components/Sidebar";
 import "./style/style.css"
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import FileSaver from 'file-saver';
 
 const App = () => {
@@ -20,7 +20,7 @@ const App = () => {
     const hours = Math.floor(finaltimeInMilliseconds / (60 * 60 * 1000));
     const minutes = Math.floor((finaltimeInMilliseconds % (60 * 60 * 1000)) / (60 * 1000));
     const seconds = Math.floor((finaltimeInMilliseconds % (60 * 1000)) / 1000);
-    
+
     const finalTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     return finalTimeString
   }
@@ -68,7 +68,7 @@ const App = () => {
   };
 
   //WORKFLOW MANAGEMENT
-  
+
   const addBtnClick = () => {
     const workflowId = `workflow-${Date.now()}`;
     const pieceIds = [];
@@ -114,7 +114,7 @@ const App = () => {
   //FUNKTIONALITÄT
 
   const saveBtnClick = () => {
-    
+
     //KONSOLIDIEREN VON ZUSAMMENHÄNGENDEN PAUSENZEITEN -> piece.visible = false
     const newData = {
       pieces: state.pieces,
@@ -168,19 +168,30 @@ const App = () => {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <Sidebar pieces={pieces} buttonclicked={addBtnClick} savebuttonclicked={saveBtnClick} upload={upload} updatepieces={updatePieces} addpiece={addPiece} setpixelfaktor={setPixelFaktor} gettimestring={getTimeString} setstarttime={setStartTime}/>
-      {Object.keys(workflows).map(columnId => {
-        const workflow = workflows[columnId];
-        if (!workflow) {
-          return (
-            <div className="Empty">Keine Elemente</div>
-          ); // or any other fallback component/element
-        }
-        const workflow_pieces = workflow.pieceIDs.map(pieceID => pieces[pieceID]);
-        return (
-          <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} />
-        );
-      })}
+      <Sidebar pieces={pieces} buttonclicked={addBtnClick} savebuttonclicked={saveBtnClick} upload={upload} updatepieces={updatePieces} addpiece={addPiece} setpixelfaktor={setPixelFaktor} gettimestring={getTimeString} setstarttime={setStartTime} />
+      <Droppable droppableID="main-droppable" type="workflow">
+        {(provided) => (
+          <div
+            className="main-container"
+            ref={provided.innerRef}
+            {...provided.droppableProps}>
+            {Object.keys(workflows).map((columnId, index) => {
+              const workflow = workflows[columnId];
+              if (!workflow) {
+                return (
+                  <div className="Empty">Keine Elemente</div>
+                ); // or any other fallback component/element
+              }
+              const workflow_pieces = workflow.pieceIDs.map(pieceID => pieces[pieceID]);
+              return (
+                <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} workflowindex={index}/>
+              );
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+
     </DragDropContext>
   );
 };

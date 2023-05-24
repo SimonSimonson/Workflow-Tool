@@ -23,7 +23,7 @@ const Sidebar = ({ pieces, buttonclicked, savebuttonclicked, upload, updatepiece
 
     return (
         <div className={'sidebar-portal'}>
-            <Droppable droppableId={"sidebar_droppable"} direction='horizontal'>
+            <Droppable droppableId={"sidebar_droppable"} direction='horizontal' type='piece'>
                 {provided => (
                     <div className="puzzle-pieces sidebar-piece" ref={provided.innerRef} {...provided.droppableProps}>
                         {Object.keys(pieces).map((key, index) =>
