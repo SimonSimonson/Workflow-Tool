@@ -24,27 +24,33 @@ const Popup = ({ onSettingsChange, onColorChange, updateMessage, delMessage, add
           <h3>Warnungen:</h3>
           {Object.values(piece.messages).map((message, index) => (
             <div key={index} className="message bordered" onDoubleClick={() => delMessage(index)}>
-              <label htmlFor={`message-time-${index}`}>Time:</label>
-              <input
-                id={`message-time-${index}`}
-                type='text'
-                value={message.time}
-                onChange={(e) => updateMessage(index, 'time', e.target.value)}
-              />
-              <label htmlFor={`message-message-${index}`}>Message:</label>
-              <input
-                id={`message-message-${index}`}
-                type='text'
-                value={message.message}
-                onChange={(e) => updateMessage(index, 'message', e.target.value)}
-              />
-              <label htmlFor={`message-sound-${index}`}>Sound:</label>
-              <input
-                id={`message-sound-${index}`}
-                type='text'
-                value={message.sound}
-                onChange={(e) => updateMessage(index, 'sound', e.target.value)}
-              />
+              <div className='message-form'>
+                <label htmlFor={`message-time-${index}`}>Time:</label>
+                <input
+                  id={`message-time-${index}`}
+                  type='text'
+                  value={message.time}
+                  onChange={(e) => updateMessage(index, 'time', e.target.value)}
+                />
+              </div>
+              <div className='message-form'>
+                <label htmlFor={`message-message-${index}`}>Nachricht:</label>
+                <input
+                  id={`message-message-${index}`}
+                  type='text'
+                  value={message.message}
+                  onChange={(e) => updateMessage(index, 'message', e.target.value)}
+                />
+              </div>
+              <div className='message-form'>
+                <label htmlFor={`message-sound-${index}`}>Sound:</label>
+                <input
+                  id={`message-sound-${index}`}
+                  type='text'
+                  value={message.sound}
+                  onChange={(e) => updateMessage(index, 'sound', e.target.value)}
+                />
+              </div>
             </div>
           ))}
           <button onClick={addMessage}>Alarm Hinzufügen</button>

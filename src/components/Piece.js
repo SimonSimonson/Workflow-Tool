@@ -6,6 +6,8 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
   const [showPopup, setShowPopup] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
+  //color for pause elements
+
   const handleMouseEnter = () => {
     setShowTooltip(true);
   };
@@ -62,7 +64,7 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
     };
     updatePieces(piece.id, { ...piece, messages: updatedMessages });
   };
-
+  
   return (
     <>
       <Draggable draggableId={newID} index={index} isDragDisabled={showPopup}>
@@ -79,8 +81,7 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
               onMouseLeave={handleMouseLeave}
               id={newID}
             >
-              <div className={isSidebar ? 'puzzle sidebar-puzzle' : 'puzzle'} style={{ backgroundColor: piece.color, width: isSidebar ? 'auto' : pixelWidth+"px"}}>
-                {isSidebar && piece.time}
+<div className={isSidebar ? 'puzzle sidebar-puzzle' : 'puzzle'} style={{ backgroundColor: piece.pause ? '#606060' : piece.color, width: isSidebar ? 'auto' : pixelWidth+"px"}}>                {isSidebar && piece.time}
                 {isSidebar && showPopup && (
                   <Popup onSettingsChange={handleSettingsChange} onColorChange={handleColorChange} onClose={handlePopup} piece={piece} updateMessage={updateMessage} delMessage={delMessage} addMessage={addMessage}></Popup>
                 )}

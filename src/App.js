@@ -13,16 +13,24 @@ const App = () => {
   const [pieces, setPieces] = useState(state.pieces);
   const [workflows, setWorkflows] = useState(state.workflows);
   const [pixelfaktor, setPixelFaktor] = useState(0.4);
-  const [starttime, setStartTime] = useState(new Date(0).setHours(11));
+  const [starttime, setStartTime] = useState(state.starttime);
+
+  const calcTime = (time_string, duration) => {
+    const [hours, minutes, seconds] = time_string.split(":");
+    const dateObj = new Date();
+    dateObj.setHours(parseInt(hours));
+    dateObj.setMinutes(parseInt(minutes));
+    dateObj.setSeconds(parseInt(seconds + duration) || 0);
+    const formattedTime = [
+      dateObj.getHours().toString().padStart(2, "0"),
+      dateObj.getMinutes().toString().padStart(2, "0"),
+      dateObj.getSeconds().toString().padStart(2, "0")
+    ].join(":");
+    
+    return formattedTime;  }
 
   const getTimeString = (duration) => {
-    const finaltimeInMilliseconds = starttime + (duration * 1000);
-    const hours = Math.floor(finaltimeInMilliseconds / (60 * 60 * 1000));
-    const minutes = Math.floor((finaltimeInMilliseconds % (60 * 60 * 1000)) / (60 * 1000));
-    const seconds = Math.floor((finaltimeInMilliseconds % (60 * 1000)) / 1000);
-
-    const finalTimeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    return finalTimeString
+    return calcTime(starttime, duration);
   }
 
   const getKey = (id) => {
@@ -49,7 +57,7 @@ const App = () => {
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
- 
+
     const dest_key = getKey(destination.droppableId)
     const dest_workflow = workflows[dest_key];
     const dest_newPieces = Array.from(dest_workflow.pieceIDs);
@@ -117,7 +125,7 @@ const App = () => {
     const second_half = workflowIds.slice(oldWorkflowIndex + 1);
     const updatedWorkflows = {
       ...first_half.reduce((obj, id) => {
-        console.log(obj,id)
+        console.log(obj, id)
         obj[id] = workflows[id];
         return obj;
       }, {}),
@@ -136,7 +144,7 @@ const App = () => {
     const objects = Object.keys(workflows)
     const indexOfClickedWorkflow = workflowIds.indexOf(workflowId);
     const swapIndex = indexOfClickedWorkflow + dir;
-    if (swapIndex < 0 || swapIndex > workflowIds.length-1){
+    if (swapIndex < 0 || swapIndex > workflowIds.length - 1) {
       console.log("out of bounds");
       return false
     }
@@ -149,7 +157,7 @@ const App = () => {
     setWorkflows(updatedWorkflows);
     return true;
   };
-  
+
 
   //FUNKTIONALITÄT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -222,7 +230,7 @@ const App = () => {
           }
           const workflow_pieces = workflow.pieceIDs.map(pieceID => pieces[pieceID]);
           return (
-            <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} workflowindex={index} move={workflowMove}/>
+            <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} workflowindex={index} move={workflowMove} />
           );
         })}
       </div>

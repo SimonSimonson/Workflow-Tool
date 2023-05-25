@@ -4,22 +4,20 @@ import { Droppable } from "react-beautiful-dnd";
 
 const Sidebar = ({ pieces, buttonclicked, savebuttonclicked, upload, updatepieces, addpiece, setpixelfaktor, gettimestring, setstarttime }) => {
     const [sliderValue, setSliderValue] = useState(1); // initial value of the slider is 1
+
     const handleSliderChange = (event) => {
         setSliderValue(parseFloat(event.target.value));
         setpixelfaktor(parseFloat(event.target.value));
     };
 
     const handleStarttimeChange = (event) => {
-        console.log(gettimestring(0));
-
+        //console.log(gettimestring(0));
         const selectedTime = event.target.value;
+        console.log(selectedTime)
+
         const timeArray = selectedTime.split(":");
-        console.log(timeArray)
-        const newStarttime = new Date().setHours(timeArray[0], timeArray[1]);
-        
-        console.log(newStarttime)
-        setstarttime(newStarttime);
-      };
+        setstarttime(timeArray[0] + ":" + timeArray[1] + ":00");
+    };
 
     return (
         <div className={'sidebar-portal'}>
@@ -41,10 +39,13 @@ const Sidebar = ({ pieces, buttonclicked, savebuttonclicked, upload, updatepiece
                 type="time"
                 id="starttime"
                 name="starttime"
+                min="00:00"
+                max="23:59"
                 value={gettimestring(0)}
                 onChange={handleStarttimeChange}
                 className="sidebar-button"
-            />            <button onClick={buttonclicked} className="sidebar-button">+</button>
+            />
+            <button onClick={buttonclicked} className="sidebar-button">+</button>
             <button onClick={savebuttonclicked} className="sidebar-button">Download</button>
             <input type="file" accept=".txt" className="sidebar-button" onChange={upload} />
 

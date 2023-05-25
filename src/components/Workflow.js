@@ -53,11 +53,10 @@ const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, p
                 <button onClick={handleDeleteBtnClick}>-</button>
                 <button onClick={handleDuplicateBtnClick}>*</button>
                 <div className="summary">{sum / 60} Minuten</div>
-                <div className="summary">{finalTimeString} Uhr</div>
+                <div className="summary">{finalTimeString}</div>
                 <div className="handle" //{...provided.dragHandleProps}
                 >
-                    <button onClick={handleMoveDown}>↑</button>
-                    <button onClick={handleMoveUp}>↓</button>
+                    <button onClick={handleMoveUp}>⇅</button>
                 </div>
             </div>
             <Droppable droppableId={workflow.id} direction="horizontal" type="piece">
