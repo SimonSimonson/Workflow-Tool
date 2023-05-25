@@ -50,11 +50,11 @@ const initialData = {
         },
     },
     workflows: {
-        'workflow-1': { id: 'workflow-1', pieceIDs: ['p3', 'p1', 'p4', 'p2', 'p3'] },
-        'workflow-2': { id: 'workflow-2', pieceIDs: ['p3', 'p3', 'p2'] },
-        'workflow-3': { id: 'workflow-3', pieceIDs: ['p1', 'p2', 'p4', 'p3', 'p3'] },
-        'workflow-4': { id: 'workflow-4', pieceIDs: ['p2', 'p1', 'p1', 'p3', 'p2', 'p3', 'p1', 'p4'] }
+        'w1': { id: 'workflow-1', pieceIDs: ['p3', 'p1', 'p4', 'p2', 'p3'] },
+        'w2': { id: 'workflow-2', pieceIDs: ['p3', 'p3', 'p2'] },
+        'w3': { id: 'workflow-3', pieceIDs: ['p1', 'p2', 'p4', 'p3', 'p3'] },
+        'w4': { id: 'workflow-4', pieceIDs: ['p2', 'p1', 'p1', 'p3', 'p2', 'p3', 'p1', 'p4'] }
     },
-    workflowOrder: ['workflow-1', 'workflow-2','workflow-3','workflow-4'],
+    workflowOrder: ['w1', 'w2','w3','w4'],
 };
 export default initialData;

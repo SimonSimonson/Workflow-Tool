@@ -36,7 +36,6 @@ const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, p
 
     const finalTimeString = gettimestring(sum);
 
-
     return (
         //<Draggable id={workflow.id} index={workflowindex}>
         //    {(provided) => (

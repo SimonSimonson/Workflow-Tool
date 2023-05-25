@@ -42,26 +42,31 @@ const App = () => {
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
-
     //hänge draggable an die richtige Stelle in destination
-    const dest_workflow = workflows[destination.droppableId];
+    const workflowIds = Object.keys(workflows).map(key => workflows[key].id);
+    const dest_index = workflowIds.indexOf(destination.droppableId);
+    const dest_key = Object.keys(workflows)[dest_index]
+    const dest_workflow = workflows[dest_key];
     const dest_newPieces = Array.from(dest_workflow.pieceIDs);
+
     if (destination.droppableId === source.droppableId) {
       dest_newPieces.splice(source.index, 1);
     }
     dest_newPieces.splice(destination.index, 0, result.draggableId.split("_")[0]);
     const newDestWorkflow = { ...dest_workflow, pieceIDs: dest_newPieces };
-    var updatedWorkflows = { ...workflows, [destination.droppableId]: newDestWorkflow };
+    var updatedWorkflows = { ...workflows, [dest_key]: newDestWorkflow };
 
     //wenn Source -> Sidebar nichts löschen, sonst aus altem Workflow entfernen
     if (source.droppableId !== "sidebar_droppable" && destination.droppableId !== source.droppableId) {
       //aus source Workflow löschen
-      const source_workflow = workflows[source.droppableId];
+      const source_index = workflowIds.indexOf(source.droppableId);
+      const source_key = Object.keys(workflows)[source_index]
+      const source_workflow = workflows[source_key];
       const source_newPieces = Array.from(source_workflow.pieceIDs);
       source_newPieces.splice(source.index, 1);
 
       const newSourceWorkflow = { ...source_workflow, pieceIDs: source_newPieces };
-      updatedWorkflows = { ...updatedWorkflows, [source.droppableId]: newSourceWorkflow };
+      updatedWorkflows = { ...updatedWorkflows, [source_key]: newSourceWorkflow };
     }
 
     setWorkflows(updatedWorkflows);
@@ -125,21 +130,29 @@ const App = () => {
 
   const workflowMove = (workflowId, dir) => {
     //tauscht fälschlicherweise an dem Index den der Name des Workflows beinhaltet nicht die stelle wo gedrückt wird
-    const workflowIds = Object.keys(workflows);
-    const indexOfClickedWorkflow = workflowIds.findIndex(id => workflows[id].id === workflowId);
+    const workflowIds = Object.keys(workflows).map(key => workflows[key].id);
+    const objects = Object.keys(workflows)
+    const indexOfClickedWorkflow = workflowIds.indexOf(workflowId);
+    //console.log("INDEX: " + indexOfClickedWorkflow);
+
     const swapIndex = indexOfClickedWorkflow + dir;
-    if (swapIndex < 0 || swapIndex > workflowIds.length-1)
+
+    //console.log("SWAPINDEX: " + swapIndex)
+
+    if (swapIndex < 0 || swapIndex > workflowIds.length-1){
+      console.log("out of bounds");
       return false
-    const swarpWorkflowId = workflowIds[swapIndex];
-    
+    }
+
+    const swapWorkflowId = workflowIds[swapIndex];
+    //console.log("SWITCHING WITH " + swapWorkflowId)
+    console.log(workflows[swapWorkflowId])
     const updatedWorkflows = {
       ...workflows,
-      [workflowId]: workflows[swarpWorkflowId],
-      [swarpWorkflowId]: workflows[workflowId]
+      [objects[indexOfClickedWorkflow]]: workflows[objects[swapIndex]],
+      [objects[swapIndex]]: workflows[objects[indexOfClickedWorkflow]]
     };
 
-    console.log("INDEX: " + indexOfClickedWorkflow)
-    console.log("Switching with " + swarpWorkflowId + " at INDEX: " + swapIndex)
     console.log(workflows)
     console.log(updatedWorkflows)
     setWorkflows(updatedWorkflows);
