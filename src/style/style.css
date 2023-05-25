@@ -102,6 +102,9 @@
     outline-offset: -1px;
     text-align: center;
     padding: 8px 0;
+
+}
+.main-container .puzzle {
     position: relative;
     z-index: -100;
 }

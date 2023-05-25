@@ -200,6 +200,7 @@ const App = () => {
   //PIECE MANAGEMENT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const updatePieces = (id, settings) => {
+    console.log(id, settings)
     const updatedPieces = { ...pieces, [id]: settings };
     setPieces(updatedPieces);
   }

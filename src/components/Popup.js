@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ReactColorPicker from '@super-effective/react-color-picker';
 
 const Popup = ({ onSettingsChange, onColorChange,updateMessage, delMessage, addMessage, piece }) => {
-  console.log(piece.messages);
   return (
     <div className='popup-container'>
       <div className='popup'>
@@ -27,8 +26,6 @@ const Popup = ({ onSettingsChange, onColorChange,updateMessage, delMessage, addM
               No
             </label>
           </div>
-          <label htmlFor='additionalText'>Additional Text:</label>
-          <textarea name='additionalText' value={piece.additionalText} onChange={onSettingsChange} />
           <h3>Warnungen:</h3>
           {Object.values(piece.messages).map((message, index) => (
             <div key={index} className="message bordered" onDoubleClick={() => delMessage(index)}>

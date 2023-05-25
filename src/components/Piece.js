@@ -5,6 +5,7 @@ import Popup from './Popup';
 const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+
   const handleMouseEnter = () => {
     setShowTooltip(true);
   };
@@ -24,7 +25,10 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
   };
 
   const handlePopup = (event) => {
+    console.log(event.target.className)
+
     if (event.target.className === "puzzle sidebar-puzzle") {
+      console.log(!showPopup)
       setShowPopup(!showPopup);
     }
   };
