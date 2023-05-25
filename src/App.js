@@ -25,6 +25,13 @@ const App = () => {
     return finalTimeString
   }
 
+  const getKey = (id) => {
+    const workflowIds = Object.keys(workflows).map(key => workflows[key].id);
+    const dest_index = workflowIds.indexOf(id);
+    const key = Object.keys(workflows)[dest_index];
+    return key
+  }
+
   const handleDragEnd = (result) => {
     const { destination, source, draggableID } = result;
     if (!destination && source.droppableId === "sidebar_droppable" || source.droppableId === "sidebar_droppable" && destination.droppableId === "sidebar_droppable")
@@ -42,10 +49,8 @@ const App = () => {
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
 
-    //hänge draggable an die richtige Stelle in destination
-    const workflowIds = Object.keys(workflows).map(key => workflows[key].id);
-    const dest_index = workflowIds.indexOf(destination.droppableId);
-    const dest_key = Object.keys(workflows)[dest_index]
+ 
+    const dest_key = getKey(destination.droppableId)
     const dest_workflow = workflows[dest_key];
     const dest_newPieces = Array.from(dest_workflow.pieceIDs);
 
@@ -59,8 +64,7 @@ const App = () => {
     //wenn Source -> Sidebar nichts löschen, sonst aus altem Workflow entfernen
     if (source.droppableId !== "sidebar_droppable" && destination.droppableId !== source.droppableId) {
       //aus source Workflow löschen
-      const source_index = workflowIds.indexOf(source.droppableId);
-      const source_key = Object.keys(workflows)[source_index]
+      const source_key = getKey(source.droppableId)
       const source_workflow = workflows[source_key];
       const source_newPieces = Array.from(source_workflow.pieceIDs);
       source_newPieces.splice(source.index, 1);
@@ -91,13 +95,13 @@ const App = () => {
   const deleteBtnClick = (workflowId) => {
     console.log("delete " + workflowId)
     const updatedWorkflows = { ...workflows };
-    delete updatedWorkflows[workflowId];
+    delete updatedWorkflows[getKey(workflowId)];
     setWorkflows(updatedWorkflows);
   };
 
   const duplicateBtnClick = (workflowId) => {
     const newworkflowId = `workflow-${Date.now()}`;
-    const workflow = { ...workflows[workflowId], id: newworkflowId };
+    const workflow = { ...workflows[getKey(workflowId)], id: newworkflowId };
     const updatedWorkflows = { ...workflows, [newworkflowId]: workflow };
     setWorkflows(updatedWorkflows);
   };
@@ -105,25 +109,27 @@ const App = () => {
   const workflowRename = (workflowId, newName) => {
     if (workflowId === newName)
       return true;
-    if (workflows[newName] || !newName)
+    if (workflows[getKey(newName)] || !newName)
       return false;
-    const workflow = workflows[workflowId];
+    const workflow = workflows[getKey(workflowId)];
     const newWorkflow = { ...workflow, id: newName };
     const workflowIds = Object.keys(workflows);
-    const oldWorkflowIndex = workflowIds.findIndex(id => id === workflowId);
+    const oldWorkflowIndex = workflowIds.findIndex(id => id === getKey(workflowId));
     const first_half = workflowIds.slice(0, oldWorkflowIndex);
     const second_half = workflowIds.slice(oldWorkflowIndex + 1);
     const updatedWorkflows = {
       ...first_half.reduce((obj, id) => {
+        console.log(obj,id)
         obj[id] = workflows[id];
         return obj;
       }, {}),
-      [newName]: newWorkflow,
+      [getKey(workflowId)]: newWorkflow,
       ...second_half.reduce((obj, id) => {
         obj[id] = workflows[id];
         return obj;
       }, {})
     };
+    console.log(updatedWorkflows)
     setWorkflows(updatedWorkflows);
     return true;
   };
