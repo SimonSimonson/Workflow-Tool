@@ -89,11 +89,9 @@ const App = () => {
     const oldWorkflow = { ...workflows };
     const updatedWorkflows = { ...oldWorkflow, [workflowId]: newWorkflow };
     setWorkflows(updatedWorkflows);
-    //console.log(workflows);
   }
 
   const deleteBtnClick = (workflowId) => {
-    console.log("delete " + workflowId)
     const updatedWorkflows = { ...workflows };
     delete updatedWorkflows[getKey(workflowId)];
     setWorkflows(updatedWorkflows);
@@ -129,40 +127,26 @@ const App = () => {
         return obj;
       }, {})
     };
-    console.log(updatedWorkflows)
     setWorkflows(updatedWorkflows);
     return true;
   };
 
   const workflowMove = (workflowId, dir) => {
-    //tauscht fälschlicherweise an dem Index den der Name des Workflows beinhaltet nicht die stelle wo gedrückt wird
     const workflowIds = Object.keys(workflows).map(key => workflows[key].id);
     const objects = Object.keys(workflows)
     const indexOfClickedWorkflow = workflowIds.indexOf(workflowId);
-    //console.log("INDEX: " + indexOfClickedWorkflow);
-
     const swapIndex = indexOfClickedWorkflow + dir;
-
-    //console.log("SWAPINDEX: " + swapIndex)
-
     if (swapIndex < 0 || swapIndex > workflowIds.length-1){
       console.log("out of bounds");
       return false
     }
-
     const swapWorkflowId = workflowIds[swapIndex];
-    //console.log("SWITCHING WITH " + swapWorkflowId)
-    console.log(workflows[swapWorkflowId])
     const updatedWorkflows = {
       ...workflows,
       [objects[indexOfClickedWorkflow]]: workflows[objects[swapIndex]],
       [objects[swapIndex]]: workflows[objects[indexOfClickedWorkflow]]
     };
-
-    console.log(workflows)
-    console.log(updatedWorkflows)
     setWorkflows(updatedWorkflows);
-    
     return true;
   };
   

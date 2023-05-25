@@ -9,15 +9,21 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
   const handleMouseEnter = () => {
     setShowTooltip(true);
   };
+
   const handleMouseLeave = () => {
     setShowTooltip(false);
   };
+
   const pixelWidth = parseInt(piece.time) * pixelfaktor;
 
   const handleSettingsChange = (event) => {
     const { name, value } = event.target;
     console.log(name + "  " + value);
-    updatePieces(piece.id, { ...piece, [name]: value });
+    if(name === 'pause'){
+      updatePieces(piece.id, { ...piece, [name]: !piece.pause });
+      return
+    }
+      updatePieces(piece.id, { ...piece, [name]: value });
   };
 
   const handleColorChange = (color) => {
@@ -25,10 +31,8 @@ const Piece = ({ newID, piece, index, isSidebar, updatePieces, pixelfaktor }) =>
   };
 
   const handlePopup = (event) => {
-    console.log(event.target.className)
 
     if (event.target.className === "puzzle sidebar-puzzle") {
-      console.log(!showPopup)
       setShowPopup(!showPopup);
     }
   };

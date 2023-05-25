@@ -56,5 +56,6 @@ const initialData = {
         'w4': { id: 'workflow-4', pieceIDs: ['p2', 'p1', 'p1', 'p3', 'p2', 'p3', 'p1', 'p4'] }
     },
     workflowOrder: ['w1', 'w2','w3','w4'],
+    starttime: "10:00",
 };
 export default initialData;

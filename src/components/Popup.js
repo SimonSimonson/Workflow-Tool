@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactColorPicker from '@super-effective/react-color-picker';
 
-const Popup = ({ onSettingsChange, onColorChange,updateMessage, delMessage, addMessage, piece }) => {
+const Popup = ({ onSettingsChange, onColorChange, updateMessage, delMessage, addMessage, piece }) => {
   return (
     <div className='popup-container'>
       <div className='popup'>
@@ -11,19 +11,14 @@ const Popup = ({ onSettingsChange, onColorChange,updateMessage, delMessage, addM
         <div className='popup-body'>
           <label htmlFor='name'>Name:</label>
           <input type='text' name='name' value={piece.name} onChange={onSettingsChange} />
-          <label htmlFor='duration'>Duration:</label>
-          <input type='text' name='duration' value={piece.time} onChange={onSettingsChange} />
+          <label htmlFor='duration'>Dauer (s):</label>
+          <input type='text' name='time' value={piece.time} onChange={onSettingsChange} />
           <label htmlFor='color'>Color:</label>
           <ReactColorPicker className={"color-picker"} onChange={onColorChange} />
           <label htmlFor='pause'>Pause:</label>
-          <div className='popup-radio'>
-            <label htmlFor='pause-yes'>
-              <input type='radio' id='pause-yes' name='pause' value='true' checked={piece.pause === true} onChange={onSettingsChange} />
-              Yes
-            </label>
-            <label htmlFor='pause-no'>
-              <input type='radio' id='pause-no' name='pause' value='false' checked={piece.pause === false} onChange={onSettingsChange} />
-              No
+          <div className='popup-checkbox'>
+            <label htmlFor='pause-checkbox'>
+              <input type='checkbox' id='pause-checkbox' name='pause' checked={piece.pause} onChange={onSettingsChange} />
             </label>
           </div>
           <h3>Warnungen:</h3>
@@ -52,8 +47,8 @@ const Popup = ({ onSettingsChange, onColorChange,updateMessage, delMessage, addM
               />
             </div>
           ))}
-          <button onClick={addMessage}>Add Message</button>
-          
+          <button onClick={addMessage}>Alarm Hinzufügen</button>
+
         </div>
       </div>
     </div>
