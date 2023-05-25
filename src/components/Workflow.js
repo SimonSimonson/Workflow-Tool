@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Piece from "./Piece";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, pixelfaktor, gettimestring, workflowindex }) => {
+const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, pixelfaktor, gettimestring, workflowindex, move }) => {
 
     const handleTitleChange = (e) => {
         if (!rename(workflow.id, e.target.textContent)) {
@@ -18,6 +18,16 @@ const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, p
     const handleDuplicateBtnClick = () => {
         duplicateclicked(workflow.id);
     };
+    
+    const handleMoveUp = () => {
+        console.log(workflow.id)
+        move(workflow.id, 1);
+    };
+    const handleMoveDown = () => {
+        console.log(workflow.id)
+        move(workflow.id, -1);
+    };
+
 
     let sum = 0;
     pieces.forEach((element) => {
@@ -46,7 +56,10 @@ const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, p
                 <div className="summary">{sum / 60} Minuten</div>
                 <div className="summary">{finalTimeString} Uhr</div>
                 <div className="handle" //{...provided.dragHandleProps}
-                ></div>
+                >
+                    <button onClick={handleMoveDown}>↑</button>
+                    <button onClick={handleMoveUp}>↓</button>
+                </div>
             </div>
             <Droppable droppableId={workflow.id} direction="horizontal" type="piece">
                 {(provided) => (
@@ -72,6 +85,6 @@ const Workflow = ({ workflow, pieces, buttonclicked, duplicateclicked, rename, p
         </div>
     )
 }
-        //</Draggable>
+//</Draggable>
 
 export default Workflow;

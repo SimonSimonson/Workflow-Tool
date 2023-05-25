@@ -67,7 +67,7 @@ const App = () => {
     setWorkflows(updatedWorkflows);
   };
 
-  //WORKFLOW MANAGEMENT
+  //WORKFLOW MANAGEMENT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const addBtnClick = () => {
     const workflowId = `workflow-${Date.now()}`;
@@ -97,60 +97,58 @@ const App = () => {
     setWorkflows(updatedWorkflows);
   };
 
-/*   const workflowRename = (workflowId, newName) => {
+  const workflowRename = (workflowId, newName) => {
     if (workflowId === newName)
       return true;
     if (workflows[newName] || !newName)
       return false;
     const workflow = workflows[workflowId];
-    const newWorkflow = { ...workflow, id: newName }
-    const updatedWorkflows = { ...workflows };
-    delete updatedWorkflows[workflowId];
-    const newWorkflows = { ...updatedWorkflows, [newName]: newWorkflow };
-    setWorkflows(newWorkflows);
-    return true;
-  } */
-
-  const workflowRename = (workflowId, newName) => {
-    if (workflowId === newName) {
-      return true;
-    }
-    
-    if (workflows[newName] || !newName) {
-      return false;
-    }
-    
-    const workflow = workflows[workflowId];
     const newWorkflow = { ...workflow, id: newName };
-  
     const workflowIds = Object.keys(workflows);
     const oldWorkflowIndex = workflowIds.findIndex(id => id === workflowId);
-  
     const first_half = workflowIds.slice(0, oldWorkflowIndex);
     const second_half = workflowIds.slice(oldWorkflowIndex + 1);
-  
-    const newWorkflows = {
-      [newName]: newWorkflow
-    };
-  
     const updatedWorkflows = {
       ...first_half.reduce((obj, id) => {
         obj[id] = workflows[id];
         return obj;
       }, {}),
-      ...newWorkflows,
+      [newName]: newWorkflow,
       ...second_half.reduce((obj, id) => {
         obj[id] = workflows[id];
         return obj;
       }, {})
     };
-  
     setWorkflows(updatedWorkflows);
+    return true;
+  };
+
+  const workflowMove = (workflowId, dir) => {
+    //tauscht fälschlicherweise an dem Index den der Name des Workflows beinhaltet nicht die stelle wo gedrückt wird
+    const workflowIds = Object.keys(workflows);
+    const indexOfClickedWorkflow = workflowIds.findIndex(id => workflows[id].id === workflowId);
+    const swapIndex = indexOfClickedWorkflow + dir;
+    if (swapIndex < 0 || swapIndex > workflowIds.length-1)
+      return false
+    const swarpWorkflowId = workflowIds[swapIndex];
+    
+    const updatedWorkflows = {
+      ...workflows,
+      [workflowId]: workflows[swarpWorkflowId],
+      [swarpWorkflowId]: workflows[workflowId]
+    };
+
+    console.log("INDEX: " + indexOfClickedWorkflow)
+    console.log("Switching with " + swarpWorkflowId + " at INDEX: " + swapIndex)
+    console.log(workflows)
+    console.log(updatedWorkflows)
+    setWorkflows(updatedWorkflows);
+    
     return true;
   };
   
 
-  //FUNKTIONALITÄT
+  //FUNKTIONALITÄT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const saveBtnClick = () => {
 
@@ -180,7 +178,7 @@ const App = () => {
     };
   }
 
-  //PIECES KONFIGURATION
+  //PIECE MANAGEMENT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   const updatePieces = (id, settings) => {
     const updatedPieces = { ...pieces, [id]: settings };
@@ -210,21 +208,21 @@ const App = () => {
     <DragDropContext onDragEnd={handleDragEnd}>
       <Sidebar pieces={pieces} buttonclicked={addBtnClick} savebuttonclicked={saveBtnClick} upload={upload} updatepieces={updatePieces} addpiece={addPiece} setpixelfaktor={setPixelFaktor} gettimestring={getTimeString} setstarttime={setStartTime} />
 
-          <div className="main-container">
-            {Object.keys(workflows).map((columnId, index) => {
-              const workflow = workflows[columnId];
-              if (!workflow) {
-                return (
-                  <div className="Empty">Keine Elemente</div>
-                ); // or any other fallback component/element
-              }
-              const workflow_pieces = workflow.pieceIDs.map(pieceID => pieces[pieceID]);
-              return (
-                <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} workflowindex={index}/>
-              );
-            })}
-          </div>
-        
+      <div className="main-container">
+        {Object.keys(workflows).map((columnId, index) => {
+          const workflow = workflows[columnId];
+          if (!workflow) {
+            return (
+              <div className="Empty">Keine Elemente</div>
+            ); // or any other fallback component/element
+          }
+          const workflow_pieces = workflow.pieceIDs.map(pieceID => pieces[pieceID]);
+          return (
+            <Workflow key={workflow.id} workflow={workflow} pieces={workflow_pieces} buttonclicked={deleteBtnClick} duplicateclicked={duplicateBtnClick} rename={workflowRename} pixelfaktor={pixelfaktor} gettimestring={getTimeString} workflowindex={index} move={workflowMove}/>
+          );
+        })}
+      </div>
+
 
     </DragDropContext>
   );

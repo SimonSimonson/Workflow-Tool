@@ -45,7 +45,7 @@ const Sidebar = ({ pieces, buttonclicked, savebuttonclicked, upload, updatepiece
                 onChange={handleStarttimeChange}
                 className="sidebar-button"
             />            <button onClick={buttonclicked} className="sidebar-button">+</button>
-            <button onClick={savebuttonclicked} className="sidebar-button">↓</button>
+            <button onClick={savebuttonclicked} className="sidebar-button">Download</button>
             <input type="file" accept=".txt" className="sidebar-button" onChange={upload} />
 
         </div>

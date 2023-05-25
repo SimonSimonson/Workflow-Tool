@@ -29,7 +29,7 @@ const Popup = ({ onSettingsChange, onColorChange,updateMessage, delMessage, addM
           </div>
           <label htmlFor='additionalText'>Additional Text:</label>
           <textarea name='additionalText' value={piece.additionalText} onChange={onSettingsChange} />
-          <h3>Messages:</h3>
+          <h3>Warnungen:</h3>
           {Object.values(piece.messages).map((message, index) => (
             <div key={index} className="message bordered" onDoubleClick={() => delMessage(index)}>
               <label htmlFor={`message-time-${index}`}>Time:</label>
